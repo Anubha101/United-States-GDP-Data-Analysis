@@ -1,0 +1,89 @@
+---
+title: "Untitled"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+suppressPackageStartupMessages(require(tidyverse))
+```
+
+# get the data
+```{r}
+data <- read.csv("Energy Census and Economic Data US 2010-2014.csv")
+```
+
+# define a function which can check the NA situation of the dataset
+```{r}
+# find the missing value
+check_missing <- function(data)
+{
+  # store the name of variable which has NA values
+  name <- c()
+  # store the number of NA values of a variable
+  num <- c()
+  # store the index of the row which has NA values
+  row <- c()
+  # get variable name
+  var_names <- names(data)
+  
+  for (i in 1:dim(data)[2]){
+    # get each variable
+    temp <- data %>% `[[` (i)
+    # this variable has NA values
+    if (!all(!(is.na(temp)))){
+      # store the variable name
+      name <- c(name,var_names[i])
+      # count the number of NA value
+      count <- 0
+      # store the index of row with NA values
+      row_record <- c()
+      for (t in 1:length(temp)){
+         # for the variable, find row with NA value
+         if (is.na(temp[t])){
+           # update the count 
+           count <- count + 1
+           # update the row indext
+           row_record <- c(row_record,t)
+         }
+      }
+      # the number of NA values
+      num <- c(num,count)
+      # the index of row with NA values
+      row <- c(row, row_record)
+    }
+  }
+  # combine all the information together
+  data.frame(name,num,row)
+}
+```
+
+# check the dataset 
+```{r}
+missing_infor <- check_missing(data)
+missing_infor <- missing_infor %>%
+  rename(column = name, index_missing_row = row)
+missing_infor
+```
+
+Based on the NA situation of the dataset. All NA values occur in the row 52. Row 52 is the observation of the US. We decided to delete this row because we want to focus on states.
+# clean the dataset
+```{r}
+cleaned_data <- data %>%
+  filter(row_number()!=52)
+```
+
+# check the cleaned dataset
+```{r}
+missing_infor_clean <- check_missing(cleaned_data)
+missing_infor_clean
+```
+
+# save the cleaned dataset
+```{r}
+write.csv(cleaned_data, 'Cleaned Energy Census and Economic Data US 2010-2014.csv')
+```
+

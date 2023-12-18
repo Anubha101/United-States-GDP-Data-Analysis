@@ -1,0 +1,677 @@
+---
+title: "Eda_Final_cor_Peter"
+author: "Zhengqi Tian"
+date: "11/18/2021"
+output: github_document
+---
+
+
+
+```{r}
+library(ggdemetra)
+library(tidyverse)
+library(ggplot2)
+library(ggpubr)
+library(ggcorrplot)
+```
+
+```{r}
+
+data <- read_csv("Energy Census and Economic Data US 2010-2014 copy.csv")
+
+```
+
+```{r}
+head(data)
+```
+
+```{r}
+data<- data[1:52,]%>%
+   mutate(GDP2010_2011 = GDP2011-GDP2010,
+          GDP2011_2012 = GDP2012-GDP2011,
+          GDP2012_2013 = GDP2013-GDP2012,
+          GDP2013_2014 = GDP2014-GDP2013,
+          NatGasC2010_2011=NatGasC2011-NatGasC2010,
+          NatGasC2011_2012=NatGasC2012-NatGasC2011,
+          NatGasC2012_2013=NatGasC2013-NatGasC2012,
+          NatGasC2013_2014=NatGasC2014-NatGasC2013,
+          TotalC2010_2011=TotalC2011-TotalC2010,
+          TotalC2011_2012=TotalC2012-TotalC2011,
+          TotalC2012_2013=TotalC2013-TotalC2012,
+          TotalC2013_2014=TotalC2014-TotalC2013,
+          CoalC2010_2011=CoalC2011-CoalC2010,
+          CoalC2011_2012=CoalC2012-CoalC2011,
+          CoalC2012_2013=CoalC2013-CoalC2012,
+          CoalC2013_2014=CoalC2014-CoalC2013,
+          GeoC2010_2011=GeoC2011-GeoC2010,
+          GeoC2011_2012=GeoC2012-GeoC2011,
+          GeoC2012_2013=GeoC2013-GeoC2012,
+          GeoC2013_2014=GeoC2014-GeoC2013,
+          ElecC2010_2011=ElecC2011-ElecC2010,
+          ElecC2011_2012=ElecC2012-ElecC2011,
+          ElecC2012_2013=ElecC2013-ElecC2012,
+          ElecC2013_2014=ElecC2014-ElecC2013,
+          LPGC2010_2011=LPGC2011-LPGC2010,
+          LPGC2011_2012=LPGC2012-LPGC2011,
+          LPGC2012_2013=LPGC2013-LPGC2012,
+          LPGC2013_2014=LPGC2014-LPGC2013,
+          HydroC2010_2011=HydroC2011-HydroC2010,
+          HydroC2011_2012=HydroC2012-HydroC2011,
+          HydroC2012_2013=HydroC2013-HydroC2012,
+          HydroC2013_2014=HydroC2014-HydroC2013,
+          FossFuelC2010_2011=FossFuelC2011-FossFuelC2010,
+          FossFuelC2011_2012=FossFuelC2012-FossFuelC2011,
+          FossFuelC2012_2013=FossFuelC2013-FossFuelC2012,
+          FossFuelC2013_2014=FossFuelC2014-FossFuelC2013,
+          BiomassC2010_2011=BiomassC2011-BiomassC2010,
+          BiomassC2011_2012=BiomassC2012-BiomassC2011,
+          BiomassC2012_2013=BiomassC2013-BiomassC2012,
+          BiomassC2013_2014=BiomassC2014-BiomassC2013,
+          NatGasPrice2010_2011=NatGasPrice2011-NatGasPrice2010,
+          NatGasPrice2011_2012=NatGasPrice2012-NatGasPrice2011,
+          NatGasPrice2012_2013=NatGasPrice2013-NatGasPrice2012,
+          NatGasPrice2013_2014=NatGasPrice2014-NatGasPrice2013,
+          TotalPrice2010_2011=TotalPrice2011-TotalPrice2010,
+          TotalPrice2011_2012=TotalPrice2012-TotalPrice2011,
+          TotalPrice2012_2013=TotalPrice2013-TotalPrice2012,
+          TotalPrice2013_2014=TotalPrice2014-TotalPrice2013,
+          CoalPrice2010_2011=CoalPrice2011-CoalPrice2010,
+          CoalPrice2011_2012=CoalPrice2012-CoalPrice2011,
+          CoalPrice2012_2013=CoalPrice2013-CoalPrice2012,
+          CoalPrice2013_2014=CoalPrice2014-CoalPrice2013,
+          ElecPrice2010_2011=ElecPrice2011-ElecPrice2010,
+          ElecPrice2011_2012=ElecPrice2012-ElecPrice2011,
+          ElecPrice2012_2013=ElecPrice2013-ElecPrice2012,
+          ElecPrice2013_2014=ElecPrice2014-ElecPrice2013,
+          LPGPrice2010_2011=LPGPrice2011-LPGPrice2010,
+          LPGPrice2011_2012=LPGPrice2012-LPGPrice2011,
+          LPGPrice2012_2013=LPGPrice2013-LPGPrice2012,
+          LPGPrice2013_2014=LPGPrice2014-LPGPrice2013,
+          TotalP2010_2011=TotalP2011-TotalP2010,
+          TotalP2011_2012=TotalP2012-TotalP2011,
+          TotalP2012_2013=TotalP2013-TotalP2012,
+          TotalP2013_2014=TotalP2014-TotalP2013,
+          CoalP2010_2011=CoalP2011-CoalP2010,
+          CoalP2011_2012=CoalP2012-CoalP2011,
+          CoalP2012_2013=CoalP2013-CoalP2012,
+          CoalP2013_2014=CoalP2014-CoalP2013,
+          GeoP2010_2011=GeoP2011-GeoP2010,
+          GeoP2011_2012=GeoP2012-GeoP2011,
+          GeoP2012_2013=GeoP2013-GeoP2012,
+          GeoP2013_2014=GeoP2014-GeoP2013,
+          HydroP2010_2011=HydroP2011-HydroP2010,
+          HydroP2011_2012=HydroP2012-HydroP2011,
+          HydroP2012_2013=HydroP2013-HydroP2012,
+          HydroP2013_2014=HydroP2014-HydroP2013,
+          NatGasE2010_2011=NatGasE2011-NatGasE2010,
+          NatGasE2011_2012=NatGasE2012-NatGasE2011,
+          NatGasE2012_2013=NatGasE2013-NatGasE2012,
+          NatGasE2013_2014=NatGasE2014-NatGasE2013,
+          TotalE2010_2011=TotalE2011-TotalE2010,
+          TotalE2011_2012=TotalE2012-TotalE2011,
+          TotalE2012_2013=TotalE2013-TotalE2012,
+          TotalE2013_2014=TotalE2014-TotalE2013,
+          CoalE2010_2011=CoalE2011-CoalE2010,
+          CoalE2011_2012=CoalE2012-CoalE2011,
+          CoalE2012_2013=CoalE2013-CoalE2012,
+          CoalE2013_2014=CoalE2014-CoalE2013,
+          ElecE2010_2011=ElecE2011-ElecE2010,
+          ElecE2011_2012=ElecE2012-ElecE2011,
+          ElecE2012_2013=ElecE2013-ElecE2012,
+          ElecE2013_2014=ElecE2014-ElecE2013,
+          LPGE2010_2011=LPGE2011-LPGE2010,
+          LPGE2011_2012=LPGE2012-LPGE2011,
+          LPGE2012_2013=LPGE2013-LPGE2012,
+          LPGE2013_2014=LPGE2014-LPGE2013
+         ) 
+```
+#GDP Change with energy GROUP Change
+```{r}
+#Generate an 2011 Consumption data table including all related columns
+Consumption2011<-data%>%
+  select("TotalC2010_2011","TotalP2010_2011","TotalE2010_2011","TotalPrice2010_2011","GDP2010_2011")
+Consumption2011
+
+#Generate an 2012 Consumption data table including all related columns
+Consumption2012<-data%>%
+  select("TotalC2011_2012","TotalP2011_2012","TotalE2011_2012","TotalPrice2011_2012","GDP2011_2012")
+Consumption2012
+
+#Generate an 2013 Consumption data table including all related columns
+Consumption2013<-data%>%
+  select("TotalC2012_2013","TotalP2012_2013","TotalE2012_2013","TotalPrice2012_2013","GDP2012_2013")
+Consumption2013
+
+#Generate an 2014 Consumption data table including all related columns
+Consumption2014<-data%>%
+ select("TotalC2013_2014","TotalP2013_2014","TotalE2013_2014","TotalPrice2013_2014","GDP2013_2014")
+Consumption2014
+```
+```{r}
+#Visualization
+#Consumption2011
+# Compute a correlation matrix
+corr2011 <- round(cor(Consumption2011), 1)
+# Compute a matrix of correlation p-values
+p.mat2011 <- cor_pmat(Consumption2011)
+# Visualize the correlation matrix
+corrplot2011<-ggcorrplot(corr2011, type = "upper",
+   outline.col = "white",
+   #hc.order = TRUE,
+   legend.title = "Correlation",
+   p.mat = p.mat2011,
+   lab = TRUE,
+   lab_size = 2,
+   ggtheme = ggplot2::theme_gray)+
+  theme(
+    axis.text.x=element_text(size=10, angle=45, vjust=1, hjust=1,margin=margin(-3,0,0,0)),
+    axis.text.y=element_text(size=10, margin=margin(0,-3,0,0)),
+    plot.margin=margin(t=20))
+corrplot2011
+
+
+# Compute a correlation matrix
+corr2012 <- round(cor(Consumption2012), 1)
+# Compute a matrix of correlation p-values
+p.mat2012 <- cor_pmat(Consumption2012)
+# Visualize the correlation matrix
+corrplot2012<-ggcorrplot(corr2012, type = "upper",
+   outline.col = "white",
+   #hc.order = TRUE,
+   legend.title = "Correlation",
+   p.mat = p.mat2012,
+   lab = TRUE,
+   lab_size = 2,
+   ggtheme = ggplot2::theme_gray)+
+  theme(
+    axis.text.x=element_text(size=10, angle=45, vjust=1, hjust=1,margin=margin(-3,0,0,0)),
+    axis.text.y=element_text(size=10, margin=margin(0,-3,0,0)),
+    plot.margin=margin(t=20))
+corrplot2012
+
+# Compute a correlation matrix
+corr2013 <- round(cor(Consumption2013), 1)
+# Compute a matrix of correlation p-values
+p.mat2013 <- cor_pmat(Consumption2013)
+# Visualize the correlation matrix
+corrplot2013<-ggcorrplot(corr2013, type = "upper",
+   outline.col = "white",
+   #hc.order = TRUE,
+   legend.title = "Correlation",
+   p.mat = p.mat2013,
+   lab = TRUE,
+   lab_size = 2,
+   ggtheme = ggplot2::theme_gray)+
+  theme(
+    axis.text.x=element_text(size=10, angle=45, vjust=1, hjust=1,margin=margin(-3,0,0,0)),
+    axis.text.y=element_text(size=10, margin=margin(0,-3,0,0)),
+    plot.margin=margin(t=20))
+corrplot2013
+
+# Compute a correlation matrix
+corr2014 <- round(cor(Consumption2014), 1)
+# Compute a matrix of correlation p-values
+p.mat2014 <- cor_pmat(Consumption2014)
+# Visualize the correlation matrix
+corrplot2014<-ggcorrplot(corr2014, type = "upper",
+   outline.col = "white",
+  # hc.order = TRUE,
+   legend.title = "Correlation",
+   p.mat = p.mat2014,
+   lab = TRUE,
+  lab_size = 2,
+   ggtheme = ggplot2::theme_gray)+
+  theme(
+    axis.text.x=element_text(size=10, angle=45, vjust=1, hjust=1,margin=margin(-3,0,0,0)),
+    axis.text.y=element_text(size=10, margin=margin(0,-3,0,0)),
+    plot.margin=margin(t=20))
+corrplot2014
+
+ggarrange( corrplot2011, corrplot2012,corrplot2013, corrplot2014,
+            labels = c("Correlation 2011", "Correlation 2012", "Correlation 2013","Correlation 2014"),
+            ncol = 2, nrow = 2,
+            legend = "right",
+           common.legend = TRUE)
+```
+
+# Consumption
+```{r}
+#Generate an 2011 Consumption data table including all related columns
+Consumption2011<-data%>%
+  select("TotalC2010_2011","BiomassC2010_2011","CoalC2010_2011","ElecC2010_2011","FossFuelC2010_2011","GeoC2010_2011","HydroC2010_2011","NatGasC2010_2011","LPGC2010_2011","GDP2010_2011")
+Consumption2011
+
+#Generate an 2012 Consumption data table including all related columns
+Consumption2012<-data%>%
+  select("TotalC2011_2012","BiomassC2011_2012","CoalC2011_2012","ElecC2011_2012","FossFuelC2011_2012","GeoC2011_2012","HydroC2011_2012","NatGasC2011_2012","LPGC2011_2012","GDP2011_2012")
+Consumption2012
+
+#Generate an 2013 Consumption data table including all related columns
+Consumption2013<-data%>%
+  select("TotalC2012_2013","BiomassC2012_2013","CoalC2012_2013","ElecC2012_2013","FossFuelC2012_2013","GeoC2012_2013","HydroC2012_2013","NatGasC2012_2013","LPGC2012_2013","GDP2012_2013")
+Consumption2013
+
+#Generate an 2014 Consumption data table including all related columns
+Consumption2014<-data%>%
+ select("TotalC2013_2014","BiomassC2013_2014","CoalC2013_2014","ElecC2013_2014","FossFuelC2013_2014","GeoC2013_2014","HydroC2013_2014","NatGasC2013_2014","LPGC2013_2014","GDP2013_2014")
+Consumption2014
+
+```
+
+```{r}
+#Visualization
+#Consumption2011
+# Compute a correlation matrix
+corr2011 <- round(cor(Consumption2011), 1)
+# Compute a matrix of correlation p-values
+p.mat2011 <- cor_pmat(Consumption2011)
+# Visualize the correlation matrix
+corrplot2011<-ggcorrplot(corr2011, type = "upper",
+   outline.col = "white",
+   #hc.order = TRUE,
+   legend.title = "Correlation",
+   p.mat = p.mat2011,
+   lab = TRUE,
+   lab_size = 2,
+   ggtheme = ggplot2::theme_gray)+
+  theme(
+    axis.text.x=element_text(size=10, angle=45, vjust=1, hjust=1,margin=margin(-3,0,0,0)),
+    axis.text.y=element_text(size=10, margin=margin(0,-3,0,0)),
+    plot.margin=margin(t=20))
+corrplot2011
+
+
+# Compute a correlation matrix
+corr2012 <- round(cor(Consumption2012), 1)
+# Compute a matrix of correlation p-values
+p.mat2012 <- cor_pmat(Consumption2012)
+# Visualize the correlation matrix
+corrplot2012<-ggcorrplot(corr2012, type = "upper",
+   outline.col = "white",
+   #hc.order = TRUE,
+   legend.title = "Correlation",
+   p.mat = p.mat2012,
+   lab = TRUE,
+   lab_size = 2,
+   ggtheme = ggplot2::theme_gray)+
+  theme(
+    axis.text.x=element_text(size=10, angle=45, vjust=1, hjust=1,margin=margin(-3,0,0,0)),
+    axis.text.y=element_text(size=10, margin=margin(0,-3,0,0)),
+    plot.margin=margin(t=20))
+corrplot2012
+
+# Compute a correlation matrix
+corr2013 <- round(cor(Consumption2013), 1)
+# Compute a matrix of correlation p-values
+p.mat2013 <- cor_pmat(Consumption2013)
+# Visualize the correlation matrix
+corrplot2013<-ggcorrplot(corr2013, type = "upper",
+   outline.col = "white",
+   #hc.order = TRUE,
+   legend.title = "Correlation",
+   p.mat = p.mat2013,
+   lab = TRUE,
+   lab_size = 2,
+   ggtheme = ggplot2::theme_gray)+
+  theme(
+    axis.text.x=element_text(size=10, angle=45, vjust=1, hjust=1,margin=margin(-3,0,0,0)),
+    axis.text.y=element_text(size=10, margin=margin(0,-3,0,0)),
+    plot.margin=margin(t=20))
+corrplot2013
+
+# Compute a correlation matrix
+corr2014 <- round(cor(Consumption2014), 1)
+# Compute a matrix of correlation p-values
+p.mat2014 <- cor_pmat(Consumption2014)
+# Visualize the correlation matrix
+corrplot2014<-ggcorrplot(corr2014, type = "upper",
+   outline.col = "white",
+  # hc.order = TRUE,
+   legend.title = "Correlation",
+   p.mat = p.mat2014,
+   lab = TRUE,
+  lab_size = 2,
+   ggtheme = ggplot2::theme_gray)+
+  theme(
+    axis.text.x=element_text(size=10, angle=45, vjust=1, hjust=1,margin=margin(-3,0,0,0)),
+    axis.text.y=element_text(size=10, margin=margin(0,-3,0,0)),
+    plot.margin=margin(t=20))
+corrplot2014
+
+ggarrange( corrplot2011, corrplot2012,corrplot2013, corrplot2014,
+            labels = c("Correlation 2011", "Correlation 2012", "Correlation 2013","Correlation 2014"),
+            ncol = 2, nrow = 2,
+            legend = "right",
+           common.legend = TRUE)
+```
+```{r}
+head(data)
+```
+
+# Production
+```{r}
+#Generate an 2011 Production data table including all related columns
+Production2011<-data%>%
+  select("TotalP2010_2011","CoalP2010_2011","GeoP2010_2011","HydroP2010_2011","GDP2010_2011")
+Production2011
+
+#Generate an 2012 Production data table including all related columns
+Production2012<-data%>%
+  select("TotalP2011_2012","CoalP2011_2012","GeoP2011_2012","HydroP2011_2012","GDP2011_2012")
+Production2012
+
+#Generate an 2013 Production data table including all related columns
+Production2013<-data%>%
+  select("TotalP2012_2013","CoalP2012_2013","GeoP2012_2013","HydroP2012_2013","GDP2012_2013")
+Production2013
+
+#Generate an 2014 Production data table including all related columns
+Production2014<-data%>%
+  select("TotalP2013_2014","CoalP2013_2014","GeoP2013_2014","HydroP2013_2014","GDP2013_2014")
+Production2014
+
+```
+```{r}
+#Visualization
+
+#Production2011
+# Compute a correlation matrix
+corr2011 <- round(cor(Production2011), 1)
+# Compute a matrix of correlation p-values
+p.mat2011 <- cor_pmat(Production2011)
+# Visualize the correlation matrix
+corrplot2011<-ggcorrplot(corr2011, type = "upper",
+   outline.col = "white",
+   hc.order = TRUE,
+   p.mat = p.mat2011,
+   legend.title = "Correlation",
+   lab = TRUE,
+   lab_size = 2,
+   ggtheme = ggplot2::theme_gray)+
+  theme(
+    axis.text.x=element_text(size=10, angle=45, vjust=1, hjust=1,margin=margin(-3,0,0,0)),
+    axis.text.y=element_text(size=10, margin=margin(0,-3,0,0)),
+    plot.margin=margin(t=20))
+corrplot2011
+
+
+# Compute a correlation matrix
+corr2012 <- round(cor(Production2012), 1)
+# Compute a matrix of correlation p-values
+p.mat2012 <- cor_pmat(Production2012)
+# Visualize the correlation matrix
+corrplot2012<-ggcorrplot(corr2012, type = "upper",
+   outline.col = "white",
+   hc.order = TRUE,
+   p.mat = p.mat2012,
+   legend.title = "Correlation",
+   lab = TRUE,
+   lab_size = 2,
+   ggtheme = ggplot2::theme_gray)+
+  theme(
+    axis.text.x=element_text(size=10, angle=45, vjust=1, hjust=1,margin=margin(-3,0,0,0)),
+    axis.text.y=element_text(size=10, margin=margin(0,-3,0,0)),
+    plot.margin=margin(t=20))
+corrplot2012
+
+# Compute a correlation matrix
+corr2013 <- round(cor(Production2013), 1)
+# Compute a matrix of correlation p-values
+p.mat2013 <- cor_pmat(Production2013)
+# Visualize the correlation matrix
+corrplot2013<-ggcorrplot(corr2013, type = "upper",
+   outline.col = "white",
+   hc.order = TRUE,
+   p.mat = p.mat2013,
+   legend.title = "Correlation",
+   lab = TRUE,
+   lab_size = 2,
+   ggtheme = ggplot2::theme_gray)+
+  theme(
+    axis.text.x=element_text(size=10, angle=45, vjust=1, hjust=1,margin=margin(-3,0,0,0)),
+    axis.text.y=element_text(size=10, margin=margin(0,-3,0,0)),
+    plot.margin=margin(t=20))
+corrplot2013
+
+# Compute a correlation matrix
+corr2014 <- round(cor(Production2014), 1)
+# Compute a matrix of correlation p-values
+p.mat2014 <- cor_pmat(Production2014)
+# Visualize the correlation matrix
+corrplot2014<-ggcorrplot(corr2014, type = "upper",
+   outline.col = "white",
+   hc.order = TRUE,
+   p.mat = p.mat2014,
+   legend.title = "Correlation",
+   lab = TRUE,
+   lab_size = 2,
+   ggtheme = ggplot2::theme_gray)+
+  theme(
+    axis.text.x=element_text(size=10, angle=45, vjust=1, hjust=1,margin=margin(-3,0,0,0)),
+    axis.text.y=element_text(size=10, margin=margin(0,-3,0,0)),
+    plot.margin=margin(t=20))
+corrplot2014
+
+ggarrange( corrplot2011, corrplot2012,corrplot2013, corrplot2014,
+            labels = c("Correlation 2011", "Correlation 2012", "Correlation 2013","Correlation 2014"),
+            ncol = 2, nrow = 2,
+            legend = "right")
+```
+
+# Expenditures
+```{r}
+#Generate an 2011 Expenditures data table including all related columns
+Expenditures2011<-data%>%
+  select("TotalE2010_2011","CoalE2010_2011","ElecE2010_2011","NatGasE2010_2011","LPGE2010_2011","GDP2010_2011")
+Expenditures2011
+
+#Generate an 2012 Expenditures data table including all related columns
+Expenditures2012<-data%>%
+  select("TotalE2011_2012","CoalE2011_2012","ElecE2011_2012","NatGasE2011_2012","LPGE2011_2012","GDP2011_2012")
+Expenditures2012
+
+#Generate an 2013 Expenditures data table including all related columns
+Expenditures2013<-data%>%
+  select("TotalE2012_2013","CoalE2012_2013","ElecE2012_2013","NatGasE2012_2013","LPGE2012_2013","GDP2012_2013")
+Expenditures2013
+
+#Generate an 2014 Expenditures data table including all related columns
+Expenditures2014<-data%>%
+  select("TotalE2013_2014","CoalE2013_2014","ElecE2013_2014","NatGasE2013_2014","LPGE2013_2014","GDP2013_2014")
+Expenditures2014
+
+```
+
+```{r}
+#Visualization
+
+#Expenditures2011
+# Compute a correlation matrix
+corr2011 <- round(cor(Expenditures2011), 1)
+# Compute a matrix of correlation p-values
+p.mat2011 <- cor_pmat(Expenditures2011)
+# Visualize the correlation matrix
+corrplot2011<-ggcorrplot(corr2011, type = "upper",
+   outline.col = "white",
+   p.mat = p.mat2011,
+   legend.title = "Correlation",
+   lab = TRUE,
+   lab_size = 2,
+   ggtheme = ggplot2::theme_gray)+
+  theme(
+    axis.text.x=element_text(size=10, angle=45, vjust=1, hjust=1,margin=margin(-3,0,0,0)),
+    axis.text.y=element_text(size=10, margin=margin(0,-3,0,0)),
+    plot.margin=margin(t=20))
+corrplot2011
+
+
+# Compute a correlation matrix
+corr2012 <- round(cor(Expenditures2012), 1)
+# Compute a matrix of correlation p-values
+p.mat2012 <- cor_pmat(Expenditures2012)
+# Visualize the correlation matrix
+corrplot2012<-ggcorrplot(corr2012, type = "upper",
+   outline.col = "white",
+   p.mat = p.mat2012,
+   legend.title = "Correlation",
+   lab = TRUE,
+   lab_size = 2,
+   ggtheme = ggplot2::theme_gray)+
+  theme(
+    axis.text.x=element_text(size=10, angle=45, vjust=1, hjust=1,margin=margin(-3,0,0,0)),
+    axis.text.y=element_text(size=10, margin=margin(0,-3,0,0)),
+    plot.margin=margin(t=20))
+corrplot2012
+
+# Compute a correlation matrix
+corr2013 <- round(cor(Expenditures2013), 1)
+# Compute a matrix of correlation p-values
+p.mat2013 <- cor_pmat(Expenditures2013)
+# Visualize the correlation matrix
+corrplot2013<-ggcorrplot(corr2013, type = "upper",
+   outline.col = "white",
+   p.mat = p.mat2013,
+   legend.title = "Correlation",
+   lab = TRUE,
+   lab_size = 2,
+   ggtheme = ggplot2::theme_gray)+
+  theme(
+    axis.text.x=element_text(size=10, angle=45, vjust=1, hjust=1,margin=margin(-3,0,0,0)),
+    axis.text.y=element_text(size=10, margin=margin(0,-3,0,0)),
+    plot.margin=margin(t=20))
+corrplot2013
+
+# Compute a correlation matrix
+corr2014 <- round(cor(Expenditures2014), 1)
+# Compute a matrix of correlation p-values
+p.mat2014 <- cor_pmat(Expenditures2014)
+# Visualize the correlation matrix
+corrplot2014<-ggcorrplot(corr2014, type = "upper",
+   outline.col = "white",
+   p.mat = p.mat2014,
+   legend.title = "Correlation",
+   lab = TRUE,
+   lab_size = 2,
+   ggtheme = ggplot2::theme_gray)+
+  theme(
+    axis.text.x=element_text(size=10, angle=45, vjust=1, hjust=1,margin=margin(-3,0,0,0)),
+    axis.text.y=element_text(size=10, margin=margin(0,-3,0,0)),
+    plot.margin=margin(t=20))
+corrplot2014
+
+ggarrange( corrplot2011, corrplot2012,corrplot2013, corrplot2014,
+            labels = c("Correlation 2011", "Correlation 2012", "Correlation 2013","Correlation 2014"),
+            ncol = 2, nrow = 2,
+            legend = "right",common.legend = TRUE)
+```
+
+# Price
+```{r}
+
+#Generate an 2011 Price data table including all related columns
+Price2011<-data%>%
+  select("TotalPrice2010_2011","CoalPrice2010_2011","ElecPrice2010_2011","NatGasPrice2010_2011","LPGPrice2010_2011","GDP2010_2011")
+Price2011
+
+#Generate an 2012 Price data table including all related columns
+Price2012<-data%>%
+  select("TotalPrice2011_2012","CoalPrice2011_2012","ElecPrice2011_2012","NatGasPrice2011_2012","LPGPrice2011_2012","GDP2011_2012")
+Price2012
+
+#Generate an 2013 Price data table including all related columns
+Price2013<-data%>%
+  select("TotalPrice2012_2013","CoalPrice2012_2013","ElecPrice2012_2013","NatGasPrice2012_2013","LPGPrice2012_2013","GDP2012_2013")
+Price2013
+
+#Generate an 2014 Price data table including all related columns
+Price2014<-data%>%
+  select("TotalPrice2013_2014","CoalPrice2013_2014","ElecPrice2013_2014","NatGasPrice2013_2014","LPGPrice2013_2014","GDP2013_2014")
+Price2014
+
+```
+
+```{r}
+#Visualization
+
+
+#Price2011
+# Compute a correlation matrix
+corr2011 <- round(cor(Price2011), 1)
+# Compute a matrix of correlation p-values
+p.mat2011 <- cor_pmat(Price2011)
+# Visualize the correlation matrix
+corrplot2011<-ggcorrplot(corr2011, type = "upper",
+   outline.col = "white",
+   hc.order = TRUE,
+   p.mat = p.mat2011,
+   legend.title = "Correlation",
+   lab = TRUE,
+   ggtheme = ggplot2::theme_gray)+
+  theme(
+    axis.text.x=element_text(size=10, angle=45, vjust=1, hjust=1,margin=margin(-3,0,0,0)),
+    axis.text.y=element_text(size=10, margin=margin(0,-3,0,0)),
+    plot.margin=margin(t=20))
+corrplot2011
+
+
+# Compute a correlation matrix
+corr2012 <- round(cor(Price2012), 1)
+# Compute a matrix of correlation p-values
+p.mat2012 <- cor_pmat(Price2012)
+# Visualize the correlation matrix
+corrplot2012<-ggcorrplot(corr2012, type = "upper",
+   outline.col = "white",
+   hc.order = TRUE,
+   p.mat = p.mat2012,
+   legend.title = "Correlation",
+   lab = TRUE,
+   ggtheme = ggplot2::theme_gray)+
+  theme(
+    axis.text.x=element_text(size=10, angle=45, vjust=1, hjust=1,margin=margin(-3,0,0,0)),
+    axis.text.y=element_text(size=10, margin=margin(0,-3,0,0)),
+    plot.margin=margin(t=20))
+corrplot2012
+
+# Compute a correlation matrix
+corr2013 <- round(cor(Price2013), 1)
+# Compute a matrix of correlation p-values
+p.mat2013 <- cor_pmat(Price2013)
+# Visualize the correlation matrix
+corrplot2013<-ggcorrplot(corr2013, type = "upper",
+   outline.col = "white",
+   hc.order = TRUE,
+   p.mat = p.mat2013,
+   legend.title = "Correlation",
+   lab = TRUE,
+   ggtheme = ggplot2::theme_gray)+
+  theme(
+    axis.text.x=element_text(size=10, angle=45, vjust=1, hjust=1,margin=margin(-3,0,0,0)),
+    axis.text.y=element_text(size=10, margin=margin(0,-3,0,0)),
+    plot.margin=margin(t=20))
+corrplot2013
+
+# Compute a correlation matrix
+corr2014 <- round(cor(Price2014), 1)
+# Compute a matrix of correlation p-values
+p.mat2014 <- cor_pmat(Price2014)
+# Visualize the correlation matrix
+corrplot2014<-ggcorrplot(corr2014, type = "upper",
+   outline.col = "white",
+   hc.order = TRUE,
+   p.mat = p.mat2014,
+   legend.title = "Correlation",
+   lab = TRUE,
+   ggtheme = ggplot2::theme_gray)+
+  theme(
+    axis.text.x=element_text(size=10, angle=45, vjust=1, hjust=1,margin=margin(-3,0,0,0)),
+    axis.text.y=element_text(size=10, margin=margin(0,-3,0,0)),
+    plot.margin=margin(t=20))
+corrplot2014
+
+ggarrange( corrplot2011, corrplot2012,corrplot2013, corrplot2014,
+            labels = c("Correlation 2011", "Correlation 2012", "Correlation 2013","Correlation 2014"),
+            ncol = 2, nrow = 2,
+            legend = "right",common.legend = TRUE)
+```
+
+
